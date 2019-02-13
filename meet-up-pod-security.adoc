@@ -6,11 +6,9 @@
 :showdetailed:
 :imagesdir: ./images
 
-= PodSecurityPolicy Demonstration
+== PodSecurityPolicy Demonstration
 
-== Create a  namespace and serviceaccounts
-
-=== Enforce PodSecurityPolicy
+=== Create a  namespace and serviceaccounts
 
 === Create the roles and rolebindings to use the policies
 
@@ -28,37 +26,46 @@ kubectl create namespace meetup-demo
 ----
 +
 
-.. Create a serviceaccount in the namespace
+. Create a serviceaccount in the namespace
 
++
 [%nowrap]
 ----
 kubectl create serviceaccount -n meetup-demo meetup-user
 ----
++
 
-
-... Assign the `edit` role to the created service account
-
+. Assign the `edit` role to the created service account
++
+[%nowrap]
 ----
 kubectl create rolebinding -n meetup-demo meetup-user --clusterrole=edit --serviceaccount=meetup-demo:meetup-user
 ----
++
 
 
 [NOTE]
 The “edit” role lets users perform basic actions like deploying pods etc.
 
 
-.... To save some typing and visual clarity `(we are mere mortals!!!)`create  aliase for the admin and the demo-user respectively.
-
+. To save some typing and visual clarity `(we are mere mortals!!!)`create  aliase for the admin and the demo-user respectively.
++
+[%nowrap]
 ----
 alias kubectl-admin='kubectl -n meetup-demo'
 ----
++
 
++
+[%nowrap]
 ----
 alias kubectl-user='kubectl --as=system:serviceaccount:meetup-demo:meetup-user -n meetup-demo'
 ----
-
-..... Now go ahead and create the `podsecuritypolicy` which preventing the pods running with root privilege
-
++
+=== Enforce PodSecurityPolicy
+. Now go ahead and create the `podsecuritypolicy` which preventing the pods running with root privilege
++
+[%nowrap]
 ----
 cat <<EOF >>restricted-policy.yaml
 apiVersion: policy/v1beta1
@@ -84,10 +91,10 @@ spec:
   - secret
 EOF
 ----
-
-
++
 . Create  manifest for pod with a container image require root privilege (eg:docker.io/wordpress)
-
++
+[%nowrap]
 ----
 cat <<EOF >> wp-root-pod.yaml
 apiVersion: v1
@@ -101,10 +108,12 @@ spec:
 EOF
 
 ----
++
 
 
 . Create manifest for a  pod with a container image needs only non-root privilege (eg:openshift/hello-openshift:v3.9)
-
++
+[nowrap]
 ----
 cat <<EOF >> non-root-pod.yaml
 apiVersion: v1
@@ -117,32 +126,44 @@ spec:
       image: openshift/hello-openshift:v3.9
 EOF
 ----
++
 . Create a container using the manifest for non-root pod
++
+[%nowrap]
 ----
 kubectl-user create -f non-root-pod.yaml
 ----
-
++
 
 You may expect an error message  message
 .Sample Output
 [%nowrap]
 
++
+[%nowrap]
 ----
 Error from server (Forbidden): error when creating "wp-roor-pod.yaml": pods "wprootpod" is forbidden: unable to validate against any pod security policy: []
 ----
++
 
 .Check the privilege of the user to use the PodSecurityPolicy resource
-
++
+[%nowrap]
 ----
 kubectl-user auth can-i use psp/restricted
 ----
-
++
 .Sample Output
 
++
+[%nowrap]
 ----
 kubectl-user auth can-i use podsecuritypolicy/restricted
 no
 ----
++
+
+=== Create the roles and rolebindings to use the policies
 
 . Create a `role` with `rule` to `use` the podsecuritypolicy resource `restricted`.
 
