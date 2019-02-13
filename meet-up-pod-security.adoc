@@ -41,12 +41,12 @@ kubectl create rolebinding -n meetup-demo meetup-user --clusterrole=edit --servi
 ----
 +
 
-
 [NOTE]
 The “edit” role lets users perform basic actions like deploying pods etc.
 
 
 . To save some typing and visual clarity `(we are mere mortals!!!)`create  aliase for the admin and the demo-user respectively.
+
 +
 [%nowrap]
 ----
@@ -160,7 +160,6 @@ kubectl-user auth can-i use podsecuritypolicy/restricted
 no
 ----
 +
-
 === Create the roles and rolebindings to use the policies
 
 . Create a `role` with `rule` to `use` the podsecuritypolicy resource `restricted`.
