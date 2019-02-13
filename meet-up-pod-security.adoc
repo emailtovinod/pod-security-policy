@@ -151,6 +151,7 @@ Error from server (Forbidden): error when creating "wp-roor-pod.yaml": pods "wpr
 kubectl-user auth can-i use psp/restricted
 ----
 +
+
 .Sample Output
 
 +
@@ -160,7 +161,8 @@ kubectl-user auth can-i use podsecuritypolicy/restricted
 no
 ----
 +
-=== Create the roles and rolebindings to use the policies
+===  Create the roles and rolebindings to use the policies
+
 
 . Create a `role` with `rule` to `use` the podsecuritypolicy resource `restricted`.
 
