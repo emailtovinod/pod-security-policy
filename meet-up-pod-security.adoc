@@ -21,14 +21,14 @@
 Create a `podsecuritypolicy` to restrict  the containers with `root` privilege from running in the cluster.
 
 . Setup a namespace to deploy the test pods
-
++
 [%nowrap]
 ----
 kubectl create namespace meetup-demo
 ----
++
 
-
-. Create a serviceaccount in the namespace
+.. Create a serviceaccount in the namespace
 
 [%nowrap]
 ----
@@ -36,7 +36,7 @@ kubectl create serviceaccount -n meetup-demo meetup-user
 ----
 
 
-. Assign the `edit` role to the created service account
+... Assign the `edit` role to the created service account
 
 ----
 kubectl create rolebinding -n meetup-demo meetup-user --clusterrole=edit --serviceaccount=meetup-demo:meetup-user
@@ -47,7 +47,7 @@ kubectl create rolebinding -n meetup-demo meetup-user --clusterrole=edit --servi
 The “edit” role lets users perform basic actions like deploying pods etc.
 
 
-. To save some typing and visual clarity `(we are mere mortals!!!)`create  aliase for the admin and the demo-user respectively.
+.... To save some typing and visual clarity `(we are mere mortals!!!)`create  aliase for the admin and the demo-user respectively.
 
 ----
 alias kubectl-admin='kubectl -n meetup-demo'
@@ -57,7 +57,7 @@ alias kubectl-admin='kubectl -n meetup-demo'
 alias kubectl-user='kubectl --as=system:serviceaccount:meetup-demo:meetup-user -n meetup-demo'
 ----
 
-. Now go ahead and create the `podsecuritypolicy` which preventing the pods running with root privilege
+..... Now go ahead and create the `podsecuritypolicy` which preventing the pods running with root privilege
 
 ----
 cat <<EOF >>restricted-policy.yaml
