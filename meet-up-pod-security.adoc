@@ -10,8 +10,6 @@
 
 === Create a  namespace and serviceaccounts
 
-=== Create the roles and rolebindings to use the policies
-
 === Use privileged and unprivileged pod manifests to test the policies
 
 ***Scenario-1***
