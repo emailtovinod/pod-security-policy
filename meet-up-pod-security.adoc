@@ -1,4 +1,3 @@
-
 :sectnums!:
 :hardbreaks:
 :scrollbar:
@@ -13,9 +12,9 @@
 
 === Enforce PodSecurityPolicy
 
-==== Create the roles and rolebindings to use the policies
+=== Create the roles and rolebindings to use the policies
 
-===== Use privileged and unprivileged pod manifests to test the policies
+=== Use privileged and unprivileged pod manifests to test the policies
 
 ***Scenario-1***
 
@@ -27,7 +26,7 @@ Create a `podsecuritypolicy` to restrict  the containers with `root` privilege f
 ----
 kubectl create namespace meetup-demo
 ----
-+
+
 
 . Create a serviceaccount in the namespace
 
@@ -35,14 +34,14 @@ kubectl create namespace meetup-demo
 ----
 kubectl create serviceaccount -n meetup-demo meetup-user
 ----
-+
+
 
 . Assign the `edit` role to the created service account
 
 ----
 kubectl create rolebinding -n meetup-demo meetup-user --clusterrole=edit --serviceaccount=meetup-demo:meetup-user
 ----
-+
+
 
 [NOTE]
 The “edit” role lets users perform basic actions like deploying pods etc.
@@ -53,7 +52,7 @@ The “edit” role lets users perform basic actions like deploying pods etc.
 ----
 alias kubectl-admin='kubectl -n meetup-demo'
 ----
-+
+
 ----
 alias kubectl-user='kubectl --as=system:serviceaccount:meetup-demo:meetup-user -n meetup-demo'
 ----
@@ -85,7 +84,7 @@ spec:
   - secret
 EOF
 ----
-+
+
 
 . Create  manifest for pod with a container image require root privilege (eg:docker.io/wordpress)
 
@@ -102,7 +101,7 @@ spec:
 EOF
 
 ----
-+
+
 
 . Create manifest for a  pod with a container image needs only non-root privilege (eg:openshift/hello-openshift:v3.9)
 
@@ -122,7 +121,7 @@ EOF
 ----
 kubectl-user create -f non-root-pod.yaml
 ----
-+
+
 
 You may expect an error message  message
 .Sample Output
@@ -137,14 +136,14 @@ Error from server (Forbidden): error when creating "wp-roor-pod.yaml": pods "wpr
 ----
 kubectl-user auth can-i use psp/restricted
 ----
-+
+
 .Sample Output
 
 ----
 kubectl-user auth can-i use podsecuritypolicy/restricted
 no
 ----
-+
+
 . Create a `role` with `rule` to `use` the podsecuritypolicy resource `restricted`.
 
 [IMPORTANT]
@@ -152,7 +151,7 @@ Admin privilege is required to create rules and assign it to users.
 ----
 kubectl-admin  create role psp:unprivileged --verb=use --resource=podsecuritypolicy --resource-name=restricted 
 ----
-+
+
 . Bind the role to the user
 ----
 kubectl-admin create rolebinding meetup-user:psp:unprivileged --role=psp:unprivileged --serviceaccount=meetup-demo:meetup-user
@@ -163,19 +162,19 @@ kubectl-admin create rolebinding meetup-user:psp:unprivileged --role=psp:unprivi
 ----
 kubectl-user auth can-i use psp/restricted
 ----
-+
+
 .Sample Output
 
 ----
 kubectl-user auth can-i use podsecuritypolicy/restricted
 yes
 ----
-+
+
 .Create the pod with non-root privilege
 ----
 kubectl-user create -f non-root-pod.yaml
 ----
-+
+
 
 .List the pod and verify the status
 
@@ -191,12 +190,12 @@ hello-openshift   1/1     Running   0          13s
 ----
 kubectl-user create -f wp-root-pod.yaml
 ----
-+
+
 .Watch the status of the pod 
 ----
 kubectl-user get po -w 
 ----
-+
+
 
 .Sample Output
 ----
@@ -205,7 +204,7 @@ NAME              READY   STATUS                       RESTARTS   AGE
 hello-openshift   1/1     Running                      0          92m
 wprootpod         0/1     CreateContainerConfigError   0          89m
 ----
-+
+
 .List the events to find the cause of the error.
 
 ----
@@ -252,23 +251,23 @@ spec:
   volumes:
   - '*'
 ----
-+
+
 
 .Create a `role` with rules to acces the podsecuritypolicy `privileged`.
 ----
 kubectl-admin  create role psp:privileged --verb=use --resource=podsecuritypolicy --resource-name=privileged
 ----
-+
+
 .Bind the role to the serviceaccount
 ----
 kubectl-admin create rolebinding meetup-user:psp:privileged --role=psp:privileged --serviceaccount=meetup-demo:meetup-user
 ----
-+
+
 .Create the pod which requires root privilege and verify the status
 ----
 kubectl-user create -f wp-root-pod.yaml
 ----
-+
+
 ----
 kubectl-user get po 
 ----
