@@ -162,13 +162,14 @@ Error from server (Forbidden): error when creating "wp-roor-pod.yaml": pods "wpr
 kubectl-user auth can-i use psp/restricted
 ----
 +
-.Sample Output
-
++
 [%nowrap]
+.Sample Output
 ----
 kubectl-user auth can-i use podsecuritypolicy/restricted
 no
 ----
++
 
 . Create a `role` with `rule` to `use` the podsecuritypolicy resource `restricted`
 +
@@ -199,11 +200,9 @@ kubectl-admin create rolebinding meetup-user:psp:unprivileged --role=psp:unprivi
 kubectl-user auth can-i use psp/restricted
 ----
 +
-
-.Sample Output
-
 +
 [%nowrap]
+.Sample Output
 ----
 kubectl-user auth can-i use podsecuritypolicy/restricted
 yes
@@ -228,10 +227,9 @@ kubectl-user create -f non-root-pod.yaml
 kubectl-user get po 
 ----
 +
-
-.Sample Output
 +
 [%nowrap]
+.Sample Output
 ----
 NAME              READY   STATUS    RESTARTS   AGE
 hello-openshift   1/1     Running   0          13s
@@ -252,11 +250,9 @@ kubectl-user create -f wp-root-pod.yaml
 kubectl-user get po -w 
 ----
 +
-
-
-.Sample Output
 +
 [%nowrap]
+.Sample Output
 ----
 [root@k8s-master ~]# kubectl-user get po -n meetup-demo
 NAME              READY   STATUS                       RESTARTS   AGE
@@ -273,9 +269,9 @@ kubectl-user get events
 ----
 +
 
-.Sample Output
 +
 [%nowrap]
+.Sample Output
 ----
 [root@k8s-master ~]# kubectl-user get events
 LAST SEEN   TYPE      REASON      KIND   MESSAGE
