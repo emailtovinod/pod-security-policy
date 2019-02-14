@@ -119,7 +119,6 @@ EOF
 ----
 +
 
-
 . Create manifest for a  pod with a container image needs only non-root privilege (eg:openshift/hello-openshift:v3.9)
 +
 [nowrap]
@@ -145,9 +144,8 @@ kubectl-user create -f non-root-pod.yaml
 +
 
 You may expect an error message  message
-.Sample Output
-[%nowrap]
 
+.Sample Output
 +
 [%nowrap]
 ----
@@ -164,6 +162,7 @@ kubectl-user auth can-i use psp/restricted
 +
 
 .Sample Output
+
 
 === Create roles and rolebindings to use the podsecurity policy
 
@@ -207,6 +206,7 @@ kubectl-user auth can-i use podsecuritypolicy/restricted
 yes
 ----
 +
+
 
 === Test the podsecuritypolicy
 
