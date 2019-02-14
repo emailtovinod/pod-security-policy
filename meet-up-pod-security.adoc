@@ -173,12 +173,11 @@ no
 +
 
 . Create a `role` with `rule` to `use` the podsecuritypolicy resource `restricted`
-+
-[%nowrap]
-
 [IMPORTANT]
 Admin privilege is required to create rules and assign it to users
 
++
+[%nowrap]
 ----
 kubectl-admin  create role psp:unprivileged --verb=use --resource=podsecuritypolicy --resource-name=restricted 
 ----
