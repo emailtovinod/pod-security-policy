@@ -12,7 +12,7 @@
 
 Create a `podsecuritypolicy` to restrict  the containers with `root` privilege from running in the cluster.
 
-=== Create a namespace and serviceaccounts
+=== Create namespace and serviceaccount for the demo
 
 . Setup a namespace to deploy the test pods
 +
@@ -153,6 +153,9 @@ Error from server (Forbidden): error when creating "wp-roor-pod.yaml": pods "wpr
 ----
 +
 
+
+=== Create roles and rolebindings to use the PodSecurityPolicy
+
 . Check the privilege of the user to use the PodSecurityPolicy resource
 +
 [%nowrap]
@@ -160,26 +163,24 @@ Error from server (Forbidden): error when creating "wp-roor-pod.yaml": pods "wpr
 kubectl-user auth can-i use psp/restricted
 ----
 +
-
 .Sample Output
-
-
-=== Create roles and rolebindings to use the podsecurity policy
-
 +
 [%nowrap]
 ----
 kubectl-user auth can-i use podsecuritypolicy/restricted
 no
 ----
-
-. Create a `role` with `rule` to `use` the podsecuritypolicy resource `restricted`.
++
+. Create a `role` with `rule` to `use` the podsecuritypolicy resource `restricted`
 
 [IMPORTANT]
-Admin privilege is required to create rules and assign it to users.
+Admin privilege is required to create rules and assign it to users
++
+[%nowrap]
 ----
 kubectl-admin  create role psp:unprivileged --verb=use --resource=podsecuritypolicy --resource-name=restricted 
 ----
++
 
 . Bind the role to the user
 
@@ -188,6 +189,7 @@ kubectl-admin  create role psp:unprivileged --verb=use --resource=podsecuritypol
 ----
 kubectl-admin create rolebinding meetup-user:psp:unprivileged --role=psp:unprivileged --serviceaccount=meetup-demo:meetup-user
 ----
++
 
 . As the user verify the access of podsecuritypolicy resource
 
@@ -208,7 +210,7 @@ yes
 +
 
 
-=== Test the podsecuritypolicy
+=== Test the PodSecurityPolicy
 
 . Create the pod with non-root privilege
 +
@@ -227,10 +229,13 @@ kubectl-user get po
 +
 
 .Sample Output
++
+[%nowrap]
 ----
 NAME              READY   STATUS    RESTARTS   AGE
 hello-openshift   1/1     Running   0          13s
 ----
++
 . Create the pod require root privilege
 +
 [%nowrap]
@@ -249,12 +254,15 @@ kubectl-user get po -w
 
 
 .Sample Output
++
+[%nowrap]
 ----
 [root@k8s-master ~]# kubectl-user get po -n meetup-demo
 NAME              READY   STATUS                       RESTARTS   AGE
 hello-openshift   1/1     Running                      0          92m
 wprootpod         0/1     CreateContainerConfigError   0          89m
 ----
++
 
 . List the events to find the cause of the error.
 +
@@ -265,8 +273,9 @@ kubectl-user get events
 +
 
 .Sample Output
++
+[%nowrap]
 ----
-
 [root@k8s-master ~]# kubectl-user get events
 LAST SEEN   TYPE      REASON      KIND   MESSAGE
 3m40s       Normal    Scheduled   Pod    Successfully assigned meetup-demo/hello-openshift to k8s-node1
@@ -279,6 +288,8 @@ LAST SEEN   TYPE      REASON      KIND   MESSAGE
 11s         Normal    Pulled      Pod    Successfully pulled image "docker.io/wordpress"
 11s         Warning   Failed      Pod    Error: container has runAsNonRoot and image will run as root
 ----
++
+
 
 ***Scenario:2***
 
