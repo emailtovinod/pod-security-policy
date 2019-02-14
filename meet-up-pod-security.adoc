@@ -10,8 +10,6 @@
 
 === Create a  namespace and serviceaccounts
 
-=== Use privileged and unprivileged pod manifests to test the policies
-
 ***Scenario-1***
 
 Create a `podsecuritypolicy` to restrict  the containers with `root` privilege from running in the cluster.
@@ -61,7 +59,8 @@ alias kubectl-user='kubectl --as=system:serviceaccount:meetup-demo:meetup-user -
 ----
 +
 === Enforce PodSecurityPolicy
-. Now go ahead and create the `podsecuritypolicy` which preventing the pods running with root privilege
+
+. Prepare manifest for a `podsecuritypolicy` which preventing the pods from running with root privilege
 +
 [%nowrap]
 ----
@@ -90,6 +89,16 @@ spec:
 EOF
 ----
 +
+
+. Create the podsecuritypolicy using the manifest
+
++
+[%nowrap]
+----
+kubectl-admin create -f restricted-policy.yaml
+----
++
+
 . Create  manifest for pod with a container image require root privilege (eg:docker.io/wordpress)
 +
 [%nowrap]
@@ -125,7 +134,7 @@ spec:
 EOF
 ----
 +
-. Create a container using the manifest for non-root pod
+. Create pod with the non-root container
 +
 [%nowrap]
 ----
@@ -144,7 +153,7 @@ Error from server (Forbidden): error when creating "wp-roor-pod.yaml": pods "wpr
 ----
 +
 
-.Check the privilege of the user to use the PodSecurityPolicy resource
+. Check the privilege of the user to use the PodSecurityPolicy resource
 +
 [%nowrap]
 ----
@@ -154,15 +163,14 @@ kubectl-user auth can-i use psp/restricted
 
 .Sample Output
 
+=== Create roles and rolebindings to use the podsecurity policy
+
 +
 [%nowrap]
 ----
 kubectl-user auth can-i use podsecuritypolicy/restricted
 no
 ----
-+
-===  Create the roles and rolebindings to use the policies
-
 
 . Create a `role` with `rule` to `use` the podsecuritypolicy resource `restricted`.
 
@@ -173,48 +181,69 @@ kubectl-admin  create role psp:unprivileged --verb=use --resource=podsecuritypol
 ----
 
 . Bind the role to the user
+
++
+[%nowrap]
 ----
 kubectl-admin create rolebinding meetup-user:psp:unprivileged --role=psp:unprivileged --serviceaccount=meetup-demo:meetup-user
 ----
 
 . As the user verify the access of podsecuritypolicy resource
 
++
+[%nowrap]
 ----
 kubectl-user auth can-i use psp/restricted
 ----
++
 
 .Sample Output
-
++
+[%nowrap]
 ----
 kubectl-user auth can-i use podsecuritypolicy/restricted
 yes
 ----
++
 
-.Create the pod with non-root privilege
+=== Test the podsecuritypolicy
+
+. Create the pod with non-root privilege
++
+[%nowrap]
 ----
 kubectl-user create -f non-root-pod.yaml
 ----
++
 
-
-.List the pod and verify the status
-
+. List  and verify the pod status
++
+[%nowrap]
 ----
 kubectl-user get po 
 ----
++
+
 .Sample Output
 ----
 NAME              READY   STATUS    RESTARTS   AGE
 hello-openshift   1/1     Running   0          13s
 ----
-.Create the pod required root privilege
+. Create the pod require root privilege
++
+[%nowrap]
 ----
 kubectl-user create -f wp-root-pod.yaml
 ----
++
 
-.Watch the status of the pod 
+. Watch the status of the pod 
++
+[%nowrap]
 ----
 kubectl-user get po -w 
 ----
++
 
 
 .Sample Output
@@ -225,11 +254,13 @@ hello-openshift   1/1     Running                      0          92m
 wprootpod         0/1     CreateContainerConfigError   0          89m
 ----
 
-.List the events to find the cause of the error.
-
+. List the events to find the cause of the error.
++
+[%nowrap]
 ----
 kubectl-user get events
 ----
++
 
 .Sample Output
 ----
@@ -248,10 +279,14 @@ LAST SEEN   TYPE      REASON      KIND   MESSAGE
 ----
 
 ***Scenario:2***
+
+===  Allocate privilege policy to the user
+
 Create a `podsecuritypolicy` to allow  the root privileged containers to  running in the cluster.Bind the policy access to the restricted user.
 
-. Go ahead and create the `podsecuritypolicy` which allow  the pods to run with root privilege
-
+. Go ahead and create a  `podsecuritypolicy` manifest  allows  the `root privilege` pods
++
+[%nowrap]
 ----
 cat <<EOF >>privileged-policy.yaml
 apiVersion: policy/v1beta1
@@ -271,19 +306,28 @@ spec:
   volumes:
   - '*'
 ----
++
 
+. Create the privileges podsecuritypolicy
 
-.Create a `role` with rules to acces the podsecuritypolicy `privileged`.
++
+[%nowrap]
+----
+kubectl-admin create -f privileged-policy.yaml
+----
++
+
+. Create a `role` with rules to acces the podsecuritypolicy `privileged`.
 ----
 kubectl-admin  create role psp:privileged --verb=use --resource=podsecuritypolicy --resource-name=privileged
 ----
 
-.Bind the role to the serviceaccount
+. Bind the role to the serviceaccount
 ----
 kubectl-admin create rolebinding meetup-user:psp:privileged --role=psp:privileged --serviceaccount=meetup-demo:meetup-user
 ----
 
-.Create the pod which requires root privilege and verify the status
+. Create the pod which requires root privilege and verify the status
 ----
 kubectl-user create -f wp-root-pod.yaml
 ----
