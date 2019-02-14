@@ -228,6 +228,7 @@ kubectl-user create -f non-root-pod.yaml
 kubectl-user get po 
 ----
 +
+
 +
 [%nowrap]
 .Sample Output
@@ -251,6 +252,7 @@ kubectl-user create -f wp-root-pod.yaml
 kubectl-user get po -w 
 ----
 +
+
 +
 [%nowrap]
 .Sample Output
