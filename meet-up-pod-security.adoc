@@ -146,6 +146,7 @@ kubectl-user create -f non-root-pod.yaml
 You may expect an error message  message
 
 .Sample Output
+
 +
 [%nowrap]
 ----
@@ -175,6 +176,7 @@ no
 
 [IMPORTANT]
 Admin privilege is required to create rules and assign it to users
+
 +
 [%nowrap]
 ----
@@ -201,6 +203,7 @@ kubectl-user auth can-i use psp/restricted
 +
 
 .Sample Output
+
 +
 [%nowrap]
 ----
