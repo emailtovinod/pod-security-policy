@@ -14,7 +14,7 @@ Create a `podsecuritypolicy` to restrict  the containers with `root` privilege f
 
 === Create namespace and serviceaccount for the demo
 
-. Setup a namespace to deploy the test pods
+. Setup a namespace for the demo pods
 +
 [%nowrap]
 ----
@@ -31,7 +31,7 @@ kubectl create serviceaccount -n meetup-demo meetup-user
 ----
 +
 
-. Assign the `edit` role to the created service account
+. Assign `edit` role to the newly created service account
 +
 [%nowrap]
 ----
@@ -98,6 +98,24 @@ EOF
 [%nowrap]
 ----
 kubectl-admin create -f restricted-policy.yaml
+----
++
+
+. List and verify the podsecuritypolicy
++
+[%nowrap]
+----
+kubectl-admin get psp
+----
++
+
++
+[%nowrap]
+.Sample Output
+----
+[root@k8s-master ~]# kubectl-admin get psp
+NAME         PRIV    CAPS   SELINUX    RUNASUSER          FSGROUP    SUPGROUP   READONLYROOTFS   VOLUMES
+restricted   false          RunAsAny   MustRunAsNonRoot   RunAsAny   RunAsAny   false            configMap,downwardAPI,emptyDir,persistentVolumeClaim,projected,secret
 ----
 +
 
@@ -318,6 +336,7 @@ spec:
     rule: RunAsAny
   volumes:
   - '*'
+EOF
 ----
 +
 
@@ -353,6 +372,10 @@ kubectl-admin create rolebinding meetup-user:psp:privileged --role=psp:privilege
 kubectl-user create -f wp-root-pod.yaml
 ----
 +
+
+[TIP]
+
+You may delete the pod in error state prior to creating the new pod with same name
 
 +
 [%nowrap]
