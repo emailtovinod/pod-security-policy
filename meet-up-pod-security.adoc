@@ -317,21 +317,31 @@ kubectl-admin create -f privileged-policy.yaml
 ----
 +
 
-. Create a `role` with rules to acces the podsecuritypolicy `privileged`.
+. Create a `role` with rules to acces the podsecuritypolicy `privileged`
++
+[%nowrap]
 ----
 kubectl-admin  create role psp:privileged --verb=use --resource=podsecuritypolicy --resource-name=privileged
 ----
++
 
 . Bind the role to the serviceaccount
++
+[%nowrap]
 ----
 kubectl-admin create rolebinding meetup-user:psp:privileged --role=psp:privileged --serviceaccount=meetup-demo:meetup-user
 ----
++
 
 . Create the pod which requires root privilege and verify the status
++
+[%nowrap]
 ----
 kubectl-user create -f wp-root-pod.yaml
 ----
-
++
++
+[%nowrap]
 ----
 kubectl-user get po 
 ----
