@@ -52,6 +52,7 @@ alias kubectl-admin='kubectl -n meetup-demo'
 ----
 +
 
++
 [%nowrap]
 ----
 alias kubectl-user='kubectl --as=system:serviceaccount:meetup-demo:meetup-user -n meetup-demo'
