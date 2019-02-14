@@ -8,11 +8,11 @@
 
 == PodSecurityPolicy Demonstration
 
-=== Create a namespace and serviceaccounts
-
 ***Scenario-1***
 
 Create a `podsecuritypolicy` to restrict  the containers with `root` privilege from running in the cluster.
+
+=== Create a namespace and serviceaccounts
 
 . Setup a namespace to deploy the test pods
 +
