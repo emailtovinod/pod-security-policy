@@ -200,6 +200,7 @@ kubectl-admin create rolebinding meetup-user:psp:unprivileged --role=psp:unprivi
 kubectl-user auth can-i use psp/restricted
 ----
 +
+
 +
 [%nowrap]
 .Sample Output
