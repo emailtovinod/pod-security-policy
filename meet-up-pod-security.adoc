@@ -340,9 +340,11 @@ kubectl-admin create rolebinding meetup-user:psp:privileged --role=psp:privilege
 kubectl-user create -f wp-root-pod.yaml
 ----
 +
+
 +
 [%nowrap]
 ----
 kubectl-user get po 
 ----
++
 
