@@ -58,6 +58,8 @@ alias kubectl-admin='kubectl -n meetup-demo'
 alias kubectl-user='kubectl --as=system:serviceaccount:meetup-demo:meetup-user -n meetup-demo'
 ----
 +
+
+
 === Enforce PodSecurityPolicy
 
 . Prepare manifest for a `podsecuritypolicy` which preventing the pods from running with root privilege
