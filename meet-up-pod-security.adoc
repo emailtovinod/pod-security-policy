@@ -380,7 +380,7 @@ You may delete the pod in error state prior to creating the new pod with same na
 +
 [%nowrap]
 ----
-kubectl-user get po 
+kubectl-user get po -w
 ----
 +
 
