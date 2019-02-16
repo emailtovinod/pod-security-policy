@@ -40,7 +40,7 @@ kubectl create rolebinding -n meetup-demo meetup-user --clusterrole=edit --servi
 +
 
 [NOTE]
-The “edit” role lets users perform basic actions like deploying pods etc.
+The ` edit` ClusterRole,  allows the user to modify resources in a namespace include that of reading and modifying Secrets. It doesn’t, however, allow viewing or modifying Roles or RoleBindings—again, this is to prevent privilege escalation.
 
 
 . To save some typing and visual clarity `(we are mere mortals!!!)`create  aliase for the admin and the demo-user respectively.
